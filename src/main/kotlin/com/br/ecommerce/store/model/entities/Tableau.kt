@@ -1,6 +1,6 @@
 package com.br.ecommerce.store.model.entities
 
-data class Login(
+data class LoginTableau(
         val credentials :Credentials
 )
 
@@ -14,7 +14,7 @@ data class ContentUrl(
         val contentUrl:String
 )
 
-data class LoginResponse(
+data class LoginResponseTableau(
         val credentials : CredentialsResponse
 )
 
