@@ -1,10 +1,12 @@
 package com.br.ecommerce.store.model.interfaces
 
+import com.br.ecommerce.store.model.entities.LoginResponse
+
 interface RequestInterface{
 
-    abstract fun postRequest(): String
+     fun loginTableau(): LoginResponse
 
-    abstract fun getRequest(): String
+     fun retriveCsvData(): String
 }
 
 
