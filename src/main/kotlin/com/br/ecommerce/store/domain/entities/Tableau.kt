@@ -32,3 +32,12 @@ data class Site (
 data class User (
         val id : String
 )
+
+data class Parameters (
+        val locale: String?,
+        val startDateB: String?,
+        val endDateB: String?,
+        val startDateA: String?,
+        val endDateA: String?,
+        val metric: String?
+)
