@@ -21,7 +21,10 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
+    implementation("junit:junit:4.12")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+	testImplementation("io.mockk:mockk:1.9")
+	testImplementation("org.assertj:assertj-core:3.17.2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
