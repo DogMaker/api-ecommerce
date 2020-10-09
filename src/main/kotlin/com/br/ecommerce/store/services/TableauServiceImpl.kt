@@ -1,5 +1,6 @@
 package com.br.ecommerce.store.services
 
+import com.br.ecommerce.store.config.logger
 import com.br.ecommerce.store.domain.exceptions.AutenticationTableauException
 import com.br.ecommerce.store.domain.exceptions.ConectionTableauException
 import com.br.ecommerce.store.domain.interfaces.TableauService
@@ -14,10 +15,12 @@ import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.UnknownHostException
-
+import org.slf4j.Logger
 
 @Service
 class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate()) : TableauService {
+
+    val logger: Logger = logger<TableauServiceImpl>()
 
     private val uri = "https://run.mocky.io/v3"
 
@@ -26,7 +29,8 @@ class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate()) : Tabl
 
         SecurityHandler.trustSelfSignedSSL()
 
-        val loginTableau = LoginTableau(Credentials("hugsil", "", ContentUrl("")))
+        val loginTableau = LoginTableau(Credentials("hugsil",
+                "", ContentUrl("")))
 
         val headers = HttpHeaders()
         headers.add("accept", "application/json")
@@ -34,11 +38,14 @@ class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate()) : Tabl
         val request: HttpEntity<LoginTableau> = HttpEntity(loginTableau, headers)
 
         return try {
+            logger.info("Request auth token from tableau")
             val response = restTemplate.exchange("$uri$path", POST, request, LoginResponseTableau::class.java)
             response.body
         } catch (e: HttpStatusCodeException) {
+            logger.error(AutenticationTableauException().message())
             throw AutenticationTableauException()
         } catch (e: UnknownHostException){
+            logger.error(ConectionTableauException().message())
             throw ConectionTableauException()
         }
     }
@@ -62,9 +69,11 @@ class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate()) : Tabl
 
         val header: HttpEntity<String> = HttpEntity(headers)
         return try {
+            logger.info("Request csv data from tableau")
             val response =  restTemplate.exchange(uriBuilder.toUriString(), GET, header, String::class.java)
             response.body.toString()
         } catch (e: UnknownHostException){
+            logger.error(ConectionTableauException().message())
             throw ConectionTableauException()
         }
     }
@@ -72,6 +81,7 @@ class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate()) : Tabl
 
 fun main() {
     val authToken = TableauServiceImpl().authentication()?.credentials?.token
-    val parameters = Parameters("pt_BR,en_US", "2020-06-25", "2020-06-26", "2020-06-26", "2020-06-26", "GSR")
+    val parameters = Parameters("pt_BR,en_US", "2020-06-25", "2020-06-26",
+            "2020-06-26", "2020-06-26", "GSR")
     println(TableauServiceImpl().retriveCsvData(authToken, parameters))
 }
