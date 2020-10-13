@@ -10,17 +10,15 @@
 </head>
 <body>
 
-<h1>CQI Metrics</h1>
-<h2>Retrive data</h2>
-
 <div class="container">
+    <h2>Retrive data</h2>
     <form action="/retrive-data-tableau" th:object="${bean}" method="POST">
             <label>Locale under analisys</label>
-            <select th:field="*{localeUnderAnalisys}">
+            <select class="form-control selectpicker" th:field="*{localeUnderAnalisys}">
                 <option th:each="n : ${bean.localeAnalisys}" th:value="${n}" th:text="${n}" />
             </select><br>
             <label>Benchmark</label>
-            <select class="form-control selectpicker" ++th:field="*{localeBenchmark}">
+            <select class="form-control selectpicker" th:field="*{localeBenchmark}">
                 <option th:each="r : ${bean.localeBench}" th:value="${r}" th:text="${r}" />
             </select><br>
 
@@ -32,16 +30,17 @@
             <input type="text" class="form-control" id="startdateB" autocomplete="off" th:field="*{startdateB}"/>
             <label for="enddateB">End date Benchmark</label>
             <input type="text" class="form-control" id="enddateB" autocomplete="off" th:field="*{enddateB}"/><br>
-
-            <select th:field="*{metricAnalisys}">
+            <label>Metrics</label>
+            <select class="form-control" th:field="*{metricAnalisys}">
                 <option th:each="r : ${bean.metric}" th:value="${r}" th:text="${r}" />
             </select><br>
 
-            <input type="submit"/></p>
+            <input type="submit" class="btn btn-primary btn-lg disabled"/></p>
 
     </form>
 </div>
 
 <p th:text="${bean.result}"></p>
+
 </body>
 </html>
