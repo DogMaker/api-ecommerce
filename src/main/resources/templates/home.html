@@ -12,7 +12,7 @@
 
 <div class="container">
     <h2>Retrive data</h2>
-    <form action="/retrive-data-tableau" th:object="${bean}" method="POST">
+    <form action="/retriveData" th:object="${bean}" method="POST">
             <label>Locale under analisys</label>
             <select class="form-control selectpicker" th:field="*{localeUnderAnalisys}">
                 <option th:each="n : ${bean.localeAnalisys}" th:value="${n}" th:text="${n}" />
