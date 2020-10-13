@@ -1,11 +1,17 @@
 package com.br.ecommerce.store.services
 
+import com.br.ecommerce.store.config.EnviomentConfig
 import com.br.ecommerce.store.config.logger
+import com.br.ecommerce.store.controller.ParametersRequestTableau
 import com.br.ecommerce.store.domain.exceptions.AutenticationTableauException
 import com.br.ecommerce.store.domain.exceptions.ConectionTableauException
 import com.br.ecommerce.store.domain.interfaces.TableauService
 import com.br.ecommerce.store.helpers.SecurityHandler
-import com.br.ecommerce.store.model.entities.*
+import com.br.ecommerce.store.model.entities.LoginResponseTableau
+import com.br.ecommerce.store.model.entities.LoginTableau
+import com.br.ecommerce.store.model.entities.Credentials
+import com.br.ecommerce.store.model.entities.ContentUrl
+import com.br.ecommerce.store.model.entities.Parameters
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod.GET
@@ -18,19 +24,20 @@ import java.net.UnknownHostException
 import org.slf4j.Logger
 
 @Service
-class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate()) : TableauService {
+class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate(),
+                         val config: EnviomentConfig = EnviomentConfig()) : TableauService {
 
     val logger: Logger = logger<TableauServiceImpl>()
 
-    private val uri = "https://run.mocky.io/v3"
+    private val uri = config.tableauUri
 
     override fun authentication(): LoginResponseTableau? {
-        val path = "/a0d4d954-5e06-42df-97f1-392cc723c723"
+        val path = config.tableauPathAuth
 
         SecurityHandler.trustSelfSignedSSL()
 
-        val loginTableau = LoginTableau(Credentials("hugsil",
-                "", ContentUrl("")))
+        val loginTableau = LoginTableau(Credentials(config.tableauUser,
+                config.tableauPass, ContentUrl("")))
 
         val headers = HttpHeaders()
         headers.add("accept", "application/json")
@@ -51,7 +58,7 @@ class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate()) : Tabl
     }
 
     override fun retriveCsvData(token: String?, params: Parameters): String {
-        val path = "/2220fc04-ac9c-4123-b4e1-b3b628cf107d"
+        val path = config.tableauPathCsv
 
         SecurityHandler.trustSelfSignedSSL()
 
@@ -77,14 +84,18 @@ class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate()) : Tabl
             throw ConectionTableauException()
         }
     }
-    fun requestData(params : Parameters){
 
+    override fun getData(params: ParametersRequestTableau):String{
+        val authToken = TableauServiceImpl().authentication()?.credentials?.token
+        logger.info("Construct the parameter url")
+        val parameters = Parameters(
+                "${params.localeUnderAnalisys},${params.localeBenchmark}",
+                params.startdateB, params.enddateB,
+                params.startdateA, params.enddateA,
+                params.metricAnalisys
+        )
+        logger.info("Created parameters ${parameters}")
+        return TableauServiceImpl().retriveCsvData(authToken, parameters)
     }
 }
 
-fun main() {
-    val authToken = TableauServiceImpl().authentication()?.credentials?.token
-    val parameters = Parameters("pt_BR,en_US", "2020-06-25", "2020-06-26",
-            "2020-06-26", "2020-06-26", "GSR")
-    println(TableauServiceImpl().retriveCsvData(authToken, parameters))
-}
