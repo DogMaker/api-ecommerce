@@ -4,37 +4,38 @@ import com.br.ecommerce.store.domain.interfaces.TableauService
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod.POST
 import org.springframework.web.servlet.ModelAndView
 
 
 @Controller
 class HomeController(val tableauService: TableauService){
 
-    @RequestMapping("home")
-    fun homePage()= ModelAndView("appPage","bean", ParametersRequestTableau())
-    }
-/*
+    @RequestMapping("")
+    fun homePage()= ModelAndView("home","bean", ParametersRequestTableau())
 
-    @RequestMapping("retrive-data-tableau")
-    fun retriveDataFromTableau()= ModelAndView("appPage","bean", ParametersRequestTableau())
-    }
+    @RequestMapping("retriveData", method= [POST])
+    fun getDataFromTableau(params : ParametersRequestTableau): ModelAndView{
+        params.result = tableauService.getData(params)
 
- */
+        return ModelAndView("home","bean", params)
+    }
+}
 
 class ParametersRequestTableau{
-    val localeUnderAnalisys= null
+    var localeUnderAnalisys: String = ""
     val localeAnalisys = listOf("pt_BR","en_US","fr_CA")
-    val localeBenchmark= null
+    var localeBenchmark: String = ""
     val localeBench= listOf("pt_BR","en_US","fr_CA")
     val metric= listOf("GSR","NLUER")
-    val metricAnalisys = null
+    var metricAnalisys : String = ""
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    val startdateA = null
+    var startdateA : String = ""
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    val enddateA = null
+    var enddateA : String = ""
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    val startdateB = null
+    var startdateB : String = ""
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    val enddateB = null
-    val result= null
+    var enddateB : String = ""
+    var result= ""
 }
