@@ -1,10 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-Hello World
+
+<h1>CQI Metrics</h1>
+<h2>Retrive data</h2>
+
+<div class="container">
+    <form action="/retrive-data-tableau" th:object="${bean}" method="POST">
+            <label>Locale under analisys</label>
+            <select th:field="*{localeUnderAnalisys}">
+                <option th:each="n : ${bean.localeAnalisys}" th:value="${n}" th:text="${n}" />
+            </select><br>
+            <label>Benchmark</label>
+            <select class="form-control selectpicker" ++th:field="*{localeBenchmark}">
+                <option th:each="r : ${bean.localeBench}" th:value="${r}" th:text="${r}" />
+            </select><br>
+
+            <label for="startdateA">Start date Under Analisys</label>
+            <input type="text" class="form-control" id="startdateA" autocomplete="off" th:field="*{startdateA}"/>
+            <label for="enddateA">End date Under Analisys</label>
+            <input type="text" class="form-control" id="enddateA" autocomplete="off" th:field="*{enddateA}"/><br>
+            <label for="startdateB">Start date Benchmark</label>
+            <input type="text" class="form-control" id="startdateB" autocomplete="off" th:field="*{startdateB}"/>
+            <label for="enddateB">End date Benchmark</label>
+            <input type="text" class="form-control" id="enddateB" autocomplete="off" th:field="*{enddateB}"/><br>
+
+            <select th:field="*{metricAnalisys}">
+                <option th:each="r : ${bean.metric}" th:value="${r}" th:text="${r}" />
+            </select><br>
+
+            <input type="submit"/></p>
+
+    </form>
+</div>
+
+<p th:text="${bean.result}"></p>
 </body>
 </html>

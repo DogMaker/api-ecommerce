@@ -77,6 +77,9 @@ class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate()) : Tabl
             throw ConectionTableauException()
         }
     }
+    fun requestData(params : Parameters){
+
+    }
 }
 
 fun main() {
