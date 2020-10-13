@@ -1,5 +1,6 @@
 package com.br.ecommerce.store.services
 
+import com.br.ecommerce.store.config.EnviomentConfig
 import com.br.ecommerce.store.domain.exceptions.AutenticationTableauException
 import com.br.ecommerce.store.domain.exceptions.ConectionTableauException
 import com.br.ecommerce.store.model.entities.*
@@ -21,11 +22,14 @@ import java.net.UnknownHostException
 class TableauServiceTest {
 
     var restTemplate = mockk<RestTemplate>()
+    private val config = EnviomentConfig()
+    private val authEndpoint = "${config.tableauUri}${config.tableauPathAuth}"
+    private val csvEndpoint =  "${config.tableauUri}${config.tableauPathCsv}"
 
     @Test
     fun `given valid credentials should return a response payload object with success`() {
         every {
-            restTemplate.exchange("https://run.mocky.io/v3/a0d4d954-5e06-42df-97f1-392cc723c723",
+            restTemplate.exchange(authEndpoint,
                     HttpMethod.POST, any(), LoginResponseTableau::class.java)
         } returns mockResponse()
 
@@ -42,7 +46,7 @@ class TableauServiceTest {
     @Test
     fun `given invalid credentials should return an exception AutenticationTableauException`() {
         every {
-            restTemplate.exchange("https://run.mocky.io/v3/a0d4d954-5e06-42df-97f1-392cc723c723",
+            restTemplate.exchange(authEndpoint,
                     HttpMethod.POST, any(), LoginResponseTableau::class.java)
         } throws HttpClientErrorException(HttpStatus.UNAUTHORIZED)
 
@@ -53,7 +57,7 @@ class TableauServiceTest {
     @Test
     fun `given invalid payload should return an exception ConectionTableauException`() {
         every {
-            restTemplate.exchange("https://run.mocky.io/v3/a0d4d954-5e06-42df-97f1-392cc723c723",
+            restTemplate.exchange(authEndpoint,
                     HttpMethod.POST, any(), LoginResponseTableau::class.java)
         } throws UnknownHostException()
 
@@ -119,7 +123,7 @@ class TableauServiceTest {
         )
     }
 
-    private val uriBuilderRetriveData = UriComponentsBuilder.fromHttpUrl("https://run.mocky.io/v3/2220fc04-ac9c-4123-b4e1-b3b628cf107d")
+    private val uriBuilderRetriveData = UriComponentsBuilder.fromHttpUrl(csvEndpoint)
             .queryParam("vf_locale", "pt_BR,en_US")
             .queryParam("vf_Start Date B", "2020-06-25")
             .queryParam("vf_End Date B", "2020-06-26")
