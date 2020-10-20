@@ -41,3 +41,4 @@ data class Parameters (
         val endDateA: String?,
         val metric: String?
 )
+
