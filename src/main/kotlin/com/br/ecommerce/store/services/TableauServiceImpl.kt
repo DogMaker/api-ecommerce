@@ -25,9 +25,10 @@ import org.slf4j.Logger
 
 @Service
 class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate(),
-                         val config: EnviomentConfig = EnviomentConfig()) : TableauService {
+                         val config: EnviomentConfig= EnviomentConfig()) : TableauService {
 
     val logger: Logger = logger<TableauServiceImpl>()
+
 
     private val uri = config.tableauUri
 
@@ -86,7 +87,7 @@ class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate(),
     }
 
     override fun getData(params: ParametersRequestTableau):String{
-        val authToken = TableauServiceImpl().authentication()?.credentials?.token
+        val authToken = authentication()?.credentials?.token
         logger.info("Construct the parameter url")
         val parameters = Parameters(
                 "${params.localeUnderAnalisys},${params.localeBenchmark}",
@@ -94,8 +95,8 @@ class TableauServiceImpl(val restTemplate: RestTemplate = RestTemplate(),
                 params.startdateA, params.enddateA,
                 params.metricAnalisys
         )
-        logger.info("Created parameters ${parameters}")
-        return TableauServiceImpl().retriveCsvData(authToken, parameters)
+        logger.info("Created parameters $parameters")
+
+        return retriveCsvData(authToken, parameters)
     }
 }
-
