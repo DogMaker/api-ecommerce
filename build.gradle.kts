@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 		plugins {
 			id("org.springframework.boot") version "2.3.4.RELEASE"
 			id("io.spring.dependency-management") version "1.0.10.RELEASE"
@@ -30,16 +32,13 @@ dependencies {
 	}
 }
 
-compileKotlin {
-	kotlinOptions.jvmTarget = "1.8"
+tasks.withType<Test> {
+	useJUnitPlatform()
 }
 
-compileTestKotlin {
-	kotlinOptions.jvmTarget = "1.8"
-}
-test {
-	useJUnitPlatform()
-	testLogging {
-	events "PASSED", "FAILED", "SKIPPED"
-			}
+tasks.withType<KotlinCompile> {
+	kotlinOptions {
+		freeCompilerArgs = listOf("-Xjsr305=strict")
+		jvmTarget = "1.8"
+	}
 }
