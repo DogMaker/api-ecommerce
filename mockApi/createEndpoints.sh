@@ -4,6 +4,9 @@ curl -v -X PUT "http://localhost:1080/mockserver/expectation" -d '{
     "path" : "/auth/signin"
   },
   "httpResponse" : {
+    "headers": {
+      "Content-Type": ["application/json"]
+    },
     "body" : "{
   \"credentials\": {
     \"site\": {
