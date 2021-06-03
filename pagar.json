@@ -1,0 +1,423 @@
+{
+	"info": {
+		"_postman_id": "115aaecc-452d-44be-94e6-6067eb5d59c5",
+		"name": "API Pagar.me",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Flow",
+			"item": [
+				{
+					"name": "Save  transaction debit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"check if card brand is visa\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.card_brand).to.eql(\"visa\");",
+									"});",
+									"",
+									"pm.test(\"check if returned just 4 digist of the card\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.card_last_digits).to.eql(\"4242\");",
+									"});",
+									"",
+									"pm.test(\"check if payment_method is debit_card\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.payment_method).to.eql(\"debit_card\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic aHVnbzoxMjM0NTY=",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100,\n    \"description\": \"ok\",\n    \"payment_method\": \"debit_card\",\n    \"card_number\": \"4242424242424242\",\n    \"card_holder_name\": \"Hugo Pereira Silva\",\n    \"card_expiration_date\": \"2022/02/22\",\n    \"card_cvv\": 100,\n    \"client_id\": 1\n}"
+						},
+						"url": "http://localhost:3000/api/v1/transactions"
+					},
+					"response": []
+				},
+				{
+					"name": "Save  transaction credit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"check if card brand is visa\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.card_brand).to.eql(\"visa\");",
+									"});",
+									"",
+									"pm.test(\"check if returned just 4 digist of the card\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.card_last_digits).to.eql(\"4242\");",
+									"});",
+									"",
+									"pm.test(\"check if payment_method is credit_card\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.payment_method).to.eql(\"credit_card\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic aHVnbzoxMjM0NTY=",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100,\n    \"description\": \"ok\",\n    \"payment_method\": \"credit_card\",\n    \"card_number\": \"4242424242424242\",\n    \"card_holder_name\": \"Hugo Pereira Silva\",\n    \"card_expiration_date\": \"2022/02/22\",\n    \"card_cvv\": 100,\n    \"client_id\": 1\n}"
+						},
+						"url": "http://localhost:3000/api/v1/transactions"
+					},
+					"response": []
+				},
+				{
+					"name": "Retrive specific data from transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"check if card brand is visa\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.card_brand).to.eql(\"visa\");",
+									"});",
+									"",
+									"pm.test(\"check if id returned is 1\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(1);",
+									"});",
+									"",
+									"pm.test(\"check if payment_method is credit_card\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.payment_method).to.eql(\"debit_card\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic aHVnbzoxMjM0NTY=",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:3000/api/v1/transactions/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Retrive all data from transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"check the number of transaction\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(2);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic aHVnbzoxMjM0NTY=",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:3000/api/v1/transactions"
+					},
+					"response": []
+				},
+				{
+					"name": "Retrive balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"check transaction balance for debit with 3% of fee\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.available.amount).to.eql(97);",
+									"});",
+									"",
+									"pm.test(\"check transaction balance for credit with 5% of fee\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.waiting_funds.amount).to.eql(95);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic aHVnbzoxMjM0NTY=",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:3000/api/v1/balance"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Validations",
+			"item": [
+				{
+					"name": "Missing token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"validate message\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error).to.eql(\"There was a problem with the user or password!\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100,\n    \"description\": \"ok\",\n    \"payment_method\": \"debit_card\",\n    \"card_number\": \"4242424242424242\",\n    \"card_holder_name\": \"Hugo Pereira Silva\",\n    \"card_expiration_date\": \"2022/02/22\",\n    \"card_cvv\": 100,\n    \"client_id\": 1\n}"
+						},
+						"url": "http://localhost:3000/api/v1/transactions"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"validate message\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error).to.eql(\"The date must to be grater than or equal to today\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic aHVnbzoxMjM0NTY=",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100,\n    \"description\": \"ok\",\n    \"payment_method\": \"debit_card\",\n    \"card_number\": \"4242424242424242\",\n    \"card_holder_name\": \"Hugo Pereira Silva\",\n    \"card_expiration_date\": \"2021/02/22\",\n    \"card_cvv\": 100,\n    \"client_id\": 1\n}"
+						},
+						"url": "http://localhost:3000/api/v1/transactions"
+					},
+					"response": []
+				},
+				{
+					"name": "get invalid transaction for the user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"validate message\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error).to.eql(\"There is no transaction with this id\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic aHVnbzoxMjM0NTY=",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100,\n    \"description\": \"ok\",\n    \"payment_method\": \"debit_card\",\n    \"card_number\": \"4242424242424242\",\n    \"card_holder_name\": \"Hugo Pereira Silva\",\n    \"card_expiration_date\": \"2022/02/22\",\n    \"card_cvv\": 100,\n    \"client_id\": 1\n}"
+						},
+						"url": "http://localhost:3000/api/v1/transactions/600"
+					},
+					"response": []
+				},
+				{
+					"name": "get invalid transaction for the user using string",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"validate message\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error).to.eql(\"The parameter id must be a number\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic aHVnbzoxMjM0NTY=",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100,\n    \"description\": \"ok\",\n    \"payment_method\": \"debit_card\",\n    \"card_number\": \"4242424242424242\",\n    \"card_holder_name\": \"Hugo Pereira Silva\",\n    \"card_expiration_date\": \"2022/02/22\",\n    \"card_cvv\": 100,\n    \"client_id\": 1\n}"
+						},
+						"url": "http://localhost:3000/api/v1/transactions/asd"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
